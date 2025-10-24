@@ -1,105 +1,140 @@
-# Route Planning Project
+High-Performance Route Planning Engine
 
-This repo contains the starter code for the Route Planning project.
+This guide provides the necessary instructions for compiling and running the Route Planning Engine specifically on a Windows environment, prioritizing the use of Windows Subsystem for Linux (WSL) for a stable C++ development experience.
 
-<img src="map.png" width="600" height="450" />
+💻 Core Technologies
 
-## Cloning
+Primary Language: C++ (using modern standards)
 
-When cloning this project, be sure to use the `--recurse-submodules` flag. Using HTTPS:
-```
-git clone https://github.com/udacity/CppND-Route-Planning-Project.git --recurse-submodules
-```
-or with SSH:
-```
-git clone git@github.com:udacity/CppND-Route-Planning-Project.git --recurse-submodules
-```
+Compilation: CMake
 
-## Dependencies for Running Locally
-* cmake >= 3.11.3
-  * All OSes: [click here for installation instructions](https://cmake.org/install/)
-* make >= 4.1 (Linux, Mac), 3.81 (Windows)
-  * Linux: make is installed by default on most Linux distros
-  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-* gcc/g++ >= 7.4.0
-  * Linux: gcc / g++ is installed by default on most Linux distros
-  * Mac: same instructions as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
-* IO2D
-  * Installation instructions for all operating systems can be found [here](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md)
-  * This library must be built in a place where CMake `find_package` will be able to find it
- 
+Build System: Make (GNU Make)
 
-## Compiling and Running
+Operating System Focus: Windows Subsystem for Linux (WSL/Ubuntu)
 
-### Compiling
-To compile the project, first, create a `build` directory and change to that directory:
-```
+Visualization: io2d Graphics Library (Submodule)
+
+Data Source: OpenStreetMap (OSM) data structure
+
+Project Setup (Cloning & Initialization)
+
+This project relies on a critical graphics submodule for visualization. To ensure all dependencies are correctly initialized upon cloning, you must use the --recurse-submodules flag:
+
+Using HTTPS (Recommended):
+
+git clone <YOUR_PROJECT_NAME> --recurse-submodules
+
+
+
+Using SSH:
+
+git clone <YOUR_PROJECT_NAME_SSH> --recurse-submodules
+
+
+
+Dependencies for Running Locally (Windows via WSL)
+
+We highly recommend using the Windows Subsystem for Linux (WSL) with a distribution like Ubuntu for reliable compilation of C++ projects and the required graphics library.
+
+Dependency
+
+Installation Method (Inside WSL/Ubuntu)
+
+cmake >= 3.11.3
+
+sudo apt install cmake
+
+make >= 4.1
+
+Installed by default with build-essential.
+
+gcc/g++ >= 7.4.0
+
+sudo apt install build-essential
+
+Graphics Library (io2d)
+
+Follow the detailed installation steps below.
+
+Graphics Library Installation (io2d via WSL/Ubuntu)
+
+This project requires the io2d graphics implementation, which is included as a submodule in the project folder (P0267_RefImpl). You must compile and install it first.
+
+Update and Install Core System Dependencies:
+
+sudo apt update
+sudo apt install build-essential cmake libcairo2-dev libgraphicsmagick1-dev libpng-dev
+
+
+
+Initialize and Build the Graphics Submodule:
+
+Navigate to the submodule's directory, build, and install its required files:
+
+cd P0267_RefImpl
+mkdir Debug
+cd Debug
+cmake ..
+cmake --build .
+sudo make install
+
+
+
+Note: If you see an error about git clone, run git submodule update --init --recursive from the project root directory and repeat the steps above.
+
+Compiling and Running the Engine
+
+All compilation and running steps should be performed inside your WSL terminal.
+
+Compiling
+
+Create a build directory and navigate into it from the project root:
+
 mkdir build && cd build
-```
-From within the `build` directory, then run `cmake` and `make` as follows:
-```
+
+
+
+Run cmake and make to compile the core engine:
+
 cmake ..
 make
-```
-### Running
-The executable will be placed in the `build` directory. From within `build`, you can run the project as follows:
-```
+
+
+
+Running
+
+The executable will be placed in the build directory.
+
+Run the engine with the default map data:
+
 ./OSM_A_star_search
-```
-Or to specify a map file:
-```
+
+
+
+To specify a custom map file:
+
 ./OSM_A_star_search -f ../<your_osm_file.osm>
-```
 
-## Testing
 
-The testing executable is also placed in the `build` directory. From within `build`, you can run the unit tests as follows:
-```
+
+Testing
+
+The unit testing executable is also placed in the build directory. From within build, you can run the unit tests as follows:
+
 ./test
-```
-
-## Troubleshooting
-* Some students have reported issues in cmake to find io2d packages, make sure you have downloaded [this](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md#xcode-and-libc).
-* For MAC Users cmake issues: Comment these lines from CMakeLists.txt under P0267_RefImpl
-    ```
-    if( NOT DEFINED IO2D_WITHOUT_SAMPLES )
-	     add_subdirectory(P0267_RefImpl/Samples)
-    endif()
-    ```
-    And then run "ALL_Build" and "install" in XCode.
-    
-    If any packages are missing try to install packages using 
-    ```
-    brew install pkg-config
-    ```
- * For Ubuntu Linux IO2D installation errors, follow the given steps:
-   ```
-	sudo apt update
-	sudo apt install build-essential
-	sudo apt install cmake
-	sudo apt install libcairo2-dev
-	sudo apt install libgraphicsmagick1-dev
-	sudo apt install libpng-dev
-
-	git clone --recurse-submodules https://github.com/cpp-io2d/P0267_RefImpl
-	cd P0267_RefImpl
-	mkdir Debug
-	cd Debug
-	cmake --config Debug "-DCMAKE_BUILD_TYPE=Debug" ..
-	cmake --build .
-	sudo make install
-   ```
-     
- * If you are working on windows and unable to install IO2D:
-      * Enable WSL (Windows Subsystem for Linux) and use a distribution like [Ubuntu](https://ubuntu.com/wsl).(available from the windows store): 
-      * Install the required dependencies (compiler, cmake etc.) in the WSL(as mentioned above for ubuntu)
-      * Configure CLion to use the WSL [toolchain](https://www.jetbrains.com/help/clion/how-to-use-wsl-development-environment-in-product.html#wsl-tooclhain)
-      * Use the WSL toolchain to build the project
-      * If you are still facing errors, visit this [link](https://github.com/udacity/CppND-Route-Planning-Project/issues/9).
-     
-
-* If you are facing errors with --config try to remove -- from the command.
 
 
+
+Troubleshooting
+
+Windows Specific Guidance
+
+If you encounter issues during the IO2D installation or compilation process:
+
+Verify WSL Configuration: Ensure the Windows Subsystem for Linux (WSL) is correctly enabled and that you are using a clean distribution like Ubuntu (available from the windows store).
+
+Toolchain Alignment: Use the WSL toolchain within your IDE (like VS Code or CLion) to build the project, ensuring consistency between the compiler environment and the installed dependencies.
+
+Dependency Issues
+
+If cmake fails to find the installed graphics library (io2d packages), ensure you have correctly run sudo make install inside the P0267_RefImpl/Debug directory to place the necessary files in the WSL system paths.
